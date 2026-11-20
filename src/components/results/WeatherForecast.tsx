@@ -21,58 +21,13 @@ interface WeatherForecastProps {
 }
 
 export const WeatherForecast: React.FC<WeatherForecastProps> = ({ customForecast, overview }) => {
-  const defaultForecastDays: WeatherForecastDay[] = [
-    {
-      day: 'Day 1 (Arrival)',
-      tempHigh: 24,
-      tempLow: 12,
-      condition: 'Sunny & Crisp Air',
-      rainChance: '10%',
-    },
-    {
-      day: 'Day 2 (Forts & Culture)',
-      tempHigh: 22,
-      tempLow: 10,
-      condition: 'Clear Blue Sky',
-      rainChance: '5%',
-    },
-    {
-      day: 'Day 3 (Attabad Lake)',
-      tempHigh: 20,
-      tempLow: 9,
-      condition: 'Partly Cloudy',
-      rainChance: '15%',
-    },
-    {
-      day: 'Day 4 (Khunjerab Pass)',
-      tempHigh: 8,
-      tempLow: -2,
-      condition: 'Cold High Altitude Wind',
-      rainChance: '20%',
-    },
-    {
-      day: 'Day 5 (Return Drive)',
-      tempHigh: 23,
-      tempLow: 11,
-      condition: 'Mild & Sunny',
-      rainChance: '10%',
-    },
-  ];
-
-  const defaultOverview: WeatherOverview = {
-    sunrise: '05:22 AM',
-    sunset: '07:18 PM',
-    bestVisitingHours: '07:30 AM - 11:30 AM & 04:00 PM - 06:45 PM',
-    recommendation: 'Pack thermal base layers for chilly mountain evenings and high UV sunscreen.',
-    warning: 'High elevation UV index. Cold mountain winds expected above 3,000m altitude.',
-    isAiEstimated: true,
+  const weatherOverview: Omit<WeatherOverview, 'isAiEstimated'> = overview ?? {
+    sunrise: 'Unavailable',
+    sunset: 'Unavailable',
+    bestVisitingHours: 'Check local forecasts',
+    recommendation: 'Check the local meteorological service for a forecast close to departure.',
   };
-
-  const weatherOverview = overview || defaultOverview;
-
-  const forecastDays = customForecast && customForecast.length > 0
-    ? customForecast
-    : defaultForecastDays;
+  const forecastDays = customForecast ?? [];
 
   return (
     <div className="space-y-6">
@@ -86,14 +41,14 @@ export const WeatherForecast: React.FC<WeatherForecastProps> = ({ customForecast
             </h2>
           </div>
           <p className="text-xs text-[#4b5563] dark:text-[#cbd5e1] font-medium mt-0.5">
-            Seasonal temperature projections, golden hours, sunrise/sunset, and travel advisories.
+            Check current forecasts and advisories before traveling.
           </p>
         </div>
 
         <div className="flex items-center gap-2 self-start sm:self-center">
           <span className="text-[11px] font-black text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 px-3.5 py-1.5 rounded-full border border-amber-200 dark:border-amber-800 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" />
-            {weatherOverview.isAiEstimated ? 'AI Climate Projections' : 'Live Altitude Stream'}
+            {forecastDays.length ? 'Forecast' : 'Forecast unavailable'}
           </span>
         </div>
       </div>

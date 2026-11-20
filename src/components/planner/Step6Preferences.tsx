@@ -67,8 +67,8 @@ export const Step6Preferences: React.FC<Step6PreferencesProps> = ({
     },
     {
       key: 'weather' as const,
-      title: 'Live Weather Radar',
-      desc: 'Day-by-day temperature forecasts and road condition alerts.',
+      title: 'Weather References',
+      desc: 'Look for local weather references for your destination.',
       icon: Sun,
     },
     {

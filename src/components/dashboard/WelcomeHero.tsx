@@ -90,7 +90,7 @@ export const WelcomeHero: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-              <span className="text-xs font-bold uppercase tracking-wider text-sky-300">Live AI Travel Engine</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-sky-300">AI Trip Planner</span>
             </div>
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-extrabold border border-sky-400/30">
               v1.0

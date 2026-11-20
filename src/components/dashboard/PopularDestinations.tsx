@@ -98,7 +98,7 @@ export const PopularDestinations: React.FC = () => {
             Popular Destinations
           </h2>
           <p className="text-xs sm:text-sm text-[#4b5563] dark:text-[#cbd5e1] font-medium">
-            Swipe through top-rated Pakistani destinations loved by travelers
+            Explore featured destination ideas in Pakistan
           </p>
         </div>
 

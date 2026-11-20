@@ -91,7 +91,7 @@ export const InteractiveMapSection: React.FC = () => {
             </h2>
           </div>
           <p className="text-xs text-[#4b5563] dark:text-[#cbd5e1] font-medium mt-0.5">
-            Suggested travel routes, elevation profiles, driving times, and nearby attraction markers.
+            Illustrative Karakoram route map. Check current driving conditions and routes with local sources.
           </p>
         </div>
 

@@ -64,10 +64,10 @@ export const SavedDestinations: React.FC = () => {
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 text-xs font-bold mb-1">
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
-            <span>{savedSpots.length} Saved Destinations</span>
+            <span>{savedSpots.length} Example Destinations</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-[#111827] dark:text-white tracking-tight">
-            Saved Destinations
+            Example Destinations
           </h2>
         </div>
 
@@ -133,7 +133,7 @@ export const SavedDestinations: React.FC = () => {
                     </span>
                     <span className="flex items-center gap-1 text-amber-500 font-extrabold">
                       <Star className="w-3.5 h-3.5 fill-amber-400" />
-                      <span>{spot.rating}</span>
+                      <span>Example</span>
                     </span>
                   </div>
 

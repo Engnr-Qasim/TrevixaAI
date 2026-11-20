@@ -63,7 +63,7 @@ export const RecentActivity: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-[#111827] dark:text-white tracking-tight">
-            Recent Activity
+            Example Activity
           </h2>
           <p className="text-xs sm:text-sm text-[#4b5563] dark:text-[#cbd5e1] font-medium">
             Your recent trip planning sessions and saved bookmarks

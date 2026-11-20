@@ -7,7 +7,7 @@ export const BudgetEstimatorPage: React.FC = () => {
     <PlaceholderModule
       badge="Module 04"
       title="Budget Estimator"
-      subtitle="Accurate travel budget calculator for Pakistan trips in PKR covering transport, fuel, driver fees, hotel tiers, food, and permits."
+      subtitle="Travel budget estimator for Pakistan trips in PKR covering transport, fuel, driver fees, hotel tiers, food, and permits."
       routePath="/budget-estimator"
       icon={<Calculator className="h-8 w-8 text-sky-500" />}
       primaryCtaText="Calculate Cost"

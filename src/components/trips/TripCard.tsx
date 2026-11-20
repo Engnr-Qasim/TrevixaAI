@@ -40,9 +40,7 @@ export const TripCard: React.FC<TripCardProps> = ({
       destination: trip.destination,
     });
 
-    // Store in session storage for trip results viewer
-    sessionStorage.setItem('trevixa_current_trip_params', JSON.stringify(trip.complete_itinerary_json));
-    navigate('/trip-results');
+    navigate('/trip-results', { state: { savedTrip: trip } });
   };
 
   const heroImg =

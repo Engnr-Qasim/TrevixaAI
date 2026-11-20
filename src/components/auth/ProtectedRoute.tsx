@@ -34,7 +34,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   if (!isSignedIn) {
-    return <Navigate to="/sign-in" state={{ from: location }} replace />;
+    return <Navigate to={`/sign-in?returnTo=${encodeURIComponent(location.pathname + location.search + location.hash)}`} replace />;
   }
 
   return <>{children}</>;

@@ -4,6 +4,8 @@ import { dark } from '@clerk/themes';
 import {
   LiveClerkAuthProvider,
   FallbackAuthProvider,
+  UnconfiguredAuthProvider,
+  CAN_USE_DEMO_AUTH,
   IS_CLERK_CONFIGURED,
 } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -17,6 +19,11 @@ export const ClerkAuthWrapper: React.FC<{ children: React.ReactNode }> = ({ chil
     return (
       <ClerkProvider
         publishableKey={CLERK_PUB_KEY}
+        signInUrl="/sign-in"
+        signUpUrl="/sign-up"
+        signInFallbackRedirectUrl="/dashboard"
+        signUpFallbackRedirectUrl="/dashboard"
+        afterSignOutUrl="/"
         appearance={{
           baseTheme: resolvedTheme === 'dark' ? dark : undefined,
           variables: {
@@ -43,5 +50,6 @@ export const ClerkAuthWrapper: React.FC<{ children: React.ReactNode }> = ({ chil
     );
   }
 
-  return <FallbackAuthProvider>{children}</FallbackAuthProvider>;
+  const Provider = CAN_USE_DEMO_AUTH ? FallbackAuthProvider : UnconfiguredAuthProvider;
+  return <Provider>{children}</Provider>;
 };

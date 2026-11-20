@@ -60,9 +60,7 @@ export const TransportSection: React.FC<TransportSectionProps> = ({ customTransp
     },
   ];
 
-  const options = (customTransportOptions && customTransportOptions.length > 0)
-    ? customTransportOptions
-    : defaultOptions;
+  const options = customTransportOptions ?? defaultOptions;
 
   return (
     <div className="space-y-6">
@@ -75,12 +73,13 @@ export const TransportSection: React.FC<TransportSectionProps> = ({ customTransp
           </h2>
         </div>
         <p className="text-xs text-[#4b5563] dark:text-[#cbd5e1] font-medium mt-0.5">
-          Vehicle recommendations, road conditions, driving difficulty ratings, and alternative transport choices.
+          Transport ideas and planning estimates. Check current road access, fares, and schedules with local operators.
         </p>
       </div>
 
       {/* Grid of Transport Options */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {options.length === 0 && <p className="text-sm text-slate-500">Confirm transport options and road conditions with local operators.</p>}
         {options.map((opt, idx) => (
           <motion.div
             key={opt.title}
@@ -133,7 +132,7 @@ export const TransportSection: React.FC<TransportSectionProps> = ({ customTransp
 
                 <div className="col-span-2 flex items-center gap-1.5 opacity-90 text-[10px]">
                   <Route className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span className="truncate">{opt.roadCondition}</span>
+                  <span className="truncate">Current conditions unconfirmed</span>
                 </div>
               </div>
 

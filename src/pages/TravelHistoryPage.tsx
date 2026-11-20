@@ -22,7 +22,7 @@ import { Button } from '../components/ui/button';
 
 export const TravelHistoryPage: React.FC = () => {
   const { user } = useAuthContext();
-  const userId = user?.id || 'usr_trevixa_demo_789';
+  const userId = user?.id ?? '';
 
   const [trips, setTrips] = useState<DbTripRecord[]>([]);
   const [recentActivities, setRecentActivities] = useState<DbRecentActivity[]>([]);

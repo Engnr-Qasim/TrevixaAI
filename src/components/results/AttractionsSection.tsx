@@ -66,7 +66,7 @@ export const AttractionsSection: React.FC<AttractionsSectionProps> = ({ customAt
     },
   ];
 
-  const attractions = (customAttractions && customAttractions.length > 0) ? customAttractions : defaultAttractions;
+  const attractions = customAttractions ?? defaultAttractions;
 
   return (
     <div className="space-y-6">
@@ -85,12 +85,13 @@ export const AttractionsSection: React.FC<AttractionsSectionProps> = ({ customAt
         </div>
 
         <span className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-3.5 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800 self-start sm:self-center">
-          Verified Opening Hours
+          Confirm hours and fees locally
         </span>
       </div>
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {attractions.length === 0 && <p className="text-sm text-slate-500">No attraction suggestions were available. Check local tourism guides.</p>}
         {attractions.map((attr, idx) => (
           <motion.div
             key={attr.id}

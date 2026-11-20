@@ -277,7 +277,7 @@ export const ProfilePage: React.FC = () => {
                 </div>
                 <div className="p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-900/60">
                   <span className="text-[10px] text-slate-400 block font-normal">Status</span>
-                  <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">Verified Member</span>
+                  <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">Traveler</span>
                 </div>
               </div>
             </div>
@@ -325,7 +325,7 @@ export const ProfilePage: React.FC = () => {
                       className="w-full px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 text-xs font-medium text-slate-500 dark:text-slate-400 cursor-not-allowed"
                     />
                     <span className="absolute right-3 top-3 text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 dark:bg-emerald-950 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
-                      Verified
+                      {user?.emailVerified ? 'Email verified' : 'Email unverified'}
                     </span>
                   </div>
                 </div>

@@ -142,7 +142,7 @@ export const AiRecommendations: React.FC = () => {
                 </span>
                 <span className="text-xs font-extrabold text-amber-300 flex items-center gap-1 bg-slate-950/60 px-2 py-0.5 rounded-full border border-amber-400/30">
                   <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                  <span>{item.rating}</span>
+                  <span>Destination idea</span>
                 </span>
               </div>
             </div>

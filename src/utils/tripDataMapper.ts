@@ -65,20 +65,11 @@ export function mapRawGeminiToTripData(raw: any, params?: TripPlannerParams): Ge
 
   const defaultDifficultyBadges = {
     difficulty: raw?.destination?.toLowerCase().includes('skardu') || raw?.destination?.toLowerCase().includes('hunza') ? 'Moderate Altitude' : 'Easy to Moderate',
-    roadQuality: '85% Paved KKH / 15% Mountain Track',
+    roadQuality: 'Current conditions unconfirmed',
     walkingLevel: 'Light Walking & Scenic Viewpoints',
-    familyFriendly: 'Highly Family & Kids Suitable',
-    soloFriendly: 'Safe & Welcoming Atmosphere',
-    wheelchairAccessibility: 'Partial (Fort steps, lake docks accessible)',
-  };
-
-  const defaultWeatherOverview = {
-    sunrise: '05:22 AM',
-    sunset: '07:18 PM',
-    bestVisitingHours: '07:30 AM - 11:30 AM & 04:00 PM - 06:45 PM',
-    recommendation: 'Pack thermal base layers for chilly mountain evenings and high UV sunscreen.',
-    warning: 'High elevation UV index. Cold winds expected above 3,000m.',
-    isAiEstimated: true,
+    familyFriendly: 'Check individual activities',
+    soloFriendly: 'Check local guidance',
+    wheelchairAccessibility: 'Check with venues',
   };
 
   const defaultGallery = [
@@ -131,23 +122,25 @@ export function mapRawGeminiToTripData(raw: any, params?: TripPlannerParams): Ge
     durationDays: typeof raw?.durationDays === 'number' ? raw.durationDays : fallbackDuration,
     budgetAmount: budgetAmount,
     bestSeason: raw?.bestSeason || 'July - October',
-    weather: raw?.weather || '22°C Clear & Sunny',
+    weather: 'Forecast unavailable',
     travelStyle: raw?.travelStyle || (params?.travelerType ? `${params.travelerType} Journey` : 'Friends & Family Trip'),
-    heroImage: raw?.heroImage && raw.heroImage.startsWith('http') ? raw.heroImage : defaultImages[0],
+    heroImage: typeof raw?.heroImage === 'string' && raw.heroImage.startsWith('https://') ? raw.heroImage : defaultImages[0],
     executiveSummary: raw?.executiveSummary || `This itinerary for ${raw?.destination || fallbackDestination} is optimized for high scenic value, cultural depth, and balanced daily driving times under 3.5 hours.`,
     feasibilityScore: typeof raw?.feasibilityScore === 'number' ? raw.feasibilityScore : 98.5,
     budgetBreakdown: budgetBreakdown,
     dayItinerary: Array.isArray(raw?.dayItinerary) ? raw.dayItinerary : [],
-    hotels: Array.isArray(raw?.hotels) ? raw.hotels : [],
+    hotels: Array.isArray(raw?.hotels) ? raw.hotels.map(hotel => ({ ...hotel, amenities: [] })) : [],
     restaurants: Array.isArray(raw?.restaurants) ? raw.restaurants : [],
-    attractions: Array.isArray(raw?.attractions) ? raw.attractions : [],
+    attractions: Array.isArray(raw?.attractions) ? raw.attractions.map(attraction => ({
+      ...attraction, openingHours: 'Check with the venue', ticketFee: 'Check with the venue',
+    })) : [],
     packingChecklist: Array.isArray(raw?.packingChecklist) ? raw.packingChecklist : [],
-    weatherForecast: Array.isArray(raw?.weatherForecast) ? raw.weatherForecast : [],
+    weatherForecast: [],
     localTips: Array.isArray(raw?.localTips) ? raw.localTips : [],
     transportOptions: Array.isArray(raw?.transportOptions) && raw.transportOptions.length > 0 ? raw.transportOptions : undefined,
-    weatherOverview: raw?.weatherOverview || defaultWeatherOverview,
-    difficultyBadges: raw?.difficultyBadges || defaultDifficultyBadges,
+    sources: Array.isArray(raw?.sources) ? raw.sources.filter((source: GeneratedTripData['sources'][number]) =>
+      typeof source?.title === 'string' && typeof source.url === 'string' && source.url.startsWith('https://')) : [],
+    difficultyBadges: defaultDifficultyBadges,
     galleryImages: Array.isArray(raw?.galleryImages) && raw.galleryImages.length > 0 ? raw.galleryImages : defaultGallery,
   };
 }
-

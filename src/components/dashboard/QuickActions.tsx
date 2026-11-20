@@ -35,7 +35,7 @@ export const QuickActions: React.FC = () => {
     {
       id: 'hotels',
       title: 'Hotels & Resorts',
-      description: 'Browse top-rated luxury and boutique stays in Pakistan',
+      description: 'Browse luxury and boutique stay ideas in Pakistan',
       icon: Hotel,
       href: '/hotels',
       color: 'from-indigo-500 to-purple-600',

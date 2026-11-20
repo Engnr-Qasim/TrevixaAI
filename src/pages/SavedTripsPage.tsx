@@ -46,7 +46,7 @@ export const SavedTripsPage: React.FC = () => {
   // Delete State
   const [deletingTrip, setDeletingTrip] = useState<DbTripRecord | null>(null);
 
-  const userId = user?.id || 'usr_trevixa_demo_789';
+  const userId = user?.id ?? '';
 
   const loadData = async () => {
     setIsLoading(true);
@@ -175,7 +175,7 @@ export const SavedTripsPage: React.FC = () => {
             </h1>
           </div>
           <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">
-            All your AI generated itineraries, bookmarked destinations, and personal favorites synced with Supabase.
+            Manage your AI itineraries, bookmarked destinations, and favorites.
           </p>
         </div>
 
@@ -363,7 +363,7 @@ export const SavedTripsPage: React.FC = () => {
                       {dest.rating && (
                         <span className="text-xs font-black text-amber-500 flex items-center gap-1">
                           <Star className="w-3.5 h-3.5 fill-amber-500" />
-                          <span>{dest.rating}</span>
+                          <span>Bookmark</span>
                         </span>
                       )}
                     </div>

@@ -90,7 +90,7 @@ export const UserProfileMenu: React.FC = () => {
                   <span>Authenticated</span>
                 </span>
                 <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
-                  Verified
+                  {user.emailVerified ? 'Email verified' : 'Email unverified'}
                 </span>
               </div>
 

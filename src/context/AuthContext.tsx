@@ -1,5 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useUser as useClerkUser, useAuth as useClerkAuth, useClerk } from '@clerk/clerk-react';
+import React, { createContext, useContext, useState, useEffect, useLayoutEffect } from 'react';
+import { useUser as useClerkUser, useAuth as useClerkAuth, useSession, useClerk } from '@clerk/clerk-react';
+
+import { connectSupabaseSession } from '../lib/supabase';
+import { dbService } from '../services/dbService';
+
+export const CAN_USE_DEMO_AUTH = import.meta.env.DEV;
 
 export interface UserProfileData {
   id: string;
@@ -16,6 +21,7 @@ interface AuthContextType {
   isLoaded: boolean;
   user: UserProfileData | null;
   isClerkLive: boolean;
+  getSessionToken: () => Promise<string | null>;
   signOut: () => Promise<void>;
   signInWithEmail: (email: string, pass: string) => Promise<{ success: boolean; error?: string }>;
   signUpWithEmail: (fullName: string, email: string, pass: string) => Promise<{ success: boolean; error?: string }>;
@@ -28,7 +34,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 const CLERK_PUB_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 export const IS_CLERK_CONFIGURED = Boolean(
-  CLERK_PUB_KEY && CLERK_PUB_KEY.length > 5 && !CLERK_PUB_KEY.includes('MY_CLERK')
+  CLERK_PUB_KEY && /^pk_(test|live)_[A-Za-z0-9+/=]+$/.test(CLERK_PUB_KEY)
 );
 
 // Fallback User State Storage Key
@@ -48,6 +54,7 @@ const defaultFallbackUser: UserProfileData = {
 const LiveClerkAuthProviderInner: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user: clerkUser, isLoaded: clerkUserLoaded } = useClerkUser();
   const { isSignedIn: clerkSignedIn, isLoaded: clerkAuthLoaded } = useClerkAuth();
+  const { session } = useSession();
   const { signOut: clerkSignOut, openSignIn, openSignUp } = useClerk();
 
   const [localCustomProfile, setLocalCustomProfile] = useState<{ fullName?: string; imageUrl?: string }>({});
@@ -105,13 +112,12 @@ const LiveClerkAuthProviderInner: React.FC<{ children: React.ReactNode }> = ({ c
     }
   };
 
-  useEffect(() => {
-    if (user) {
-      import('../services/dbService').then(({ dbService }) => {
-        dbService.ensureUserProfile(user);
-      });
-    }
-  }, [user?.id]);
+  useLayoutEffect(() => {
+    if (!session || !user) return;
+    const disconnect = connectSupabaseSession(() => session.getToken());
+    dbService.ensureUserProfile(user);
+    return disconnect;
+  }, [session, user?.id, user?.email, user?.fullName, user?.imageUrl]);
 
   return (
     <AuthContext.Provider
@@ -120,6 +126,7 @@ const LiveClerkAuthProviderInner: React.FC<{ children: React.ReactNode }> = ({ c
         isLoaded: clerkUserLoaded && clerkAuthLoaded,
         user,
         isClerkLive: true,
+        getSessionToken: () => session?.getToken() ?? Promise.resolve(null),
         signOut: handleSignOut,
         signInWithEmail: handleSignInWithEmail,
         signUpWithEmail: handleSignUpWithEmail,
@@ -276,6 +283,7 @@ export const FallbackAuthProvider: React.FC<{ children: React.ReactNode }> = ({ 
         isLoaded,
         user,
         isClerkLive: false,
+        getSessionToken: async () => null,
         signOut,
         signInWithEmail,
         signUpWithEmail,
@@ -288,6 +296,19 @@ export const FallbackAuthProvider: React.FC<{ children: React.ReactNode }> = ({ 
     </AuthContext.Provider>
   );
 };
+
+const authUnavailable = async () => ({ success: false, error: 'Authentication is unavailable.' });
+
+export const UnconfiguredAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <AuthContext.Provider value={{
+    isSignedIn: false, isLoaded: true, isClerkLive: false, user: null,
+    getSessionToken: async () => null, signOut: async () => {},
+    signInWithEmail: authUnavailable, signUpWithEmail: authUnavailable,
+    signInWithGoogle: authUnavailable, updateProfile: authUnavailable, deleteAccount: authUnavailable,
+  }}>
+    {children}
+  </AuthContext.Provider>
+);
 
 export const LiveClerkAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <LiveClerkAuthProviderInner>{children}</LiveClerkAuthProviderInner>;

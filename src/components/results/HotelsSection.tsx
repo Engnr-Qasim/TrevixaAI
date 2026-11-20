@@ -91,7 +91,7 @@ export const HotelsSection: React.FC<HotelsSectionProps> = ({ onToast, customHot
     },
   ];
 
-  const hotels = (customHotels && customHotels.length > 0) ? customHotels : defaultHotels;
+  const hotels = customHotels ?? defaultHotels;
 
   const toggleFavorite = (id: string) => {
     if (favorites.includes(id)) {
@@ -122,7 +122,7 @@ export const HotelsSection: React.FC<HotelsSectionProps> = ({ onToast, customHot
             </h2>
           </div>
           <p className="text-xs text-[#4b5563] dark:text-[#cbd5e1] font-medium mt-0.5">
-            Handpicked stays matched to your comfort budget with verified hot water & heating facilities.
+            Lodging suggestions with estimated costs. Confirm room availability, prices, and amenities directly.
           </p>
         </div>
 
@@ -133,6 +133,7 @@ export const HotelsSection: React.FC<HotelsSectionProps> = ({ onToast, customHot
 
       {/* Grid of Hotels */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {hotels.length === 0 && <p className="text-sm text-slate-500">No lodging suggestions were available. Check local accommodation providers.</p>}
         {hotels.map((hotel, idx) => {
           const isFav = favorites.includes(hotel.id);
           const isBooked = bookedIds.includes(hotel.id);
@@ -156,7 +157,7 @@ export const HotelsSection: React.FC<HotelsSectionProps> = ({ onToast, customHot
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
 
                   <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md text-white text-[10px] font-black border border-white/20">
-                    {hotel.badge}
+                    Availability unconfirmed
                   </span>
 
                   <button
@@ -174,8 +175,8 @@ export const HotelsSection: React.FC<HotelsSectionProps> = ({ onToast, customHot
 
                     <div className="flex items-center gap-1 bg-amber-500 text-slate-950 px-2.5 py-0.5 rounded-lg text-xs font-black">
                       <Star className="w-3.5 h-3.5 fill-slate-950" />
-                      <span>{hotel.rating}</span>
-                      <span className="text-[10px] opacity-80">({hotel.reviewsCount})</span>
+                      <span>Rating unavailable</span>
+
                     </div>
                   </div>
                 </div>

@@ -72,7 +72,7 @@ export const TravelDifficultyBadges: React.FC<TravelDifficultyBadgesProps> = ({
             </h2>
           </div>
           <p className="text-xs text-[#4b5563] dark:text-[#cbd5e1] font-medium mt-0.5">
-            Real-time accessibility, road condition, and comfort ratings for this destination.
+            Planning estimates. Check road conditions and accessibility before travel.
           </p>
         </div>
 

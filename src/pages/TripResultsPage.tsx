@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { HeroSummary } from '../components/results/HeroSummary';
 import { AISummaryCard } from '../components/results/AISummaryCard';
@@ -19,15 +19,18 @@ import { ActionCenterSection } from '../components/results/ActionCenterSection';
 import { FeedbackSection } from '../components/results/FeedbackSection';
 import { MobileStickyBar } from '../components/results/MobileStickyBar';
 import { CheckCircle2, Sparkles, ChevronLeft, RefreshCw, AlertCircle, Loader2, Compass } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { GeneratedTripData, TripPlannerParams } from '../types/tripResult';
 import { mapRawGeminiToTripData } from '../utils/tripDataMapper';
 import { useAuthContext } from '../context/AuthContext';
 import { dbService, DbTripRecord } from '../services/dbService';
 
 export const TripResultsPage: React.FC = () => {
-  const { user } = useAuthContext();
-  const userId = user?.id || 'usr_trevixa_demo_789';
+  const { user, getSessionToken } = useAuthContext();
+  const { state } = useLocation();
+  const userId = user?.id;
+  const started = useRef(false);
+  const savedTrip = userId && state?.savedTrip?.user_id === userId ? state.savedTrip as DbTripRecord : null;
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isSaved, setIsSaved] = useState(false);
@@ -44,12 +47,12 @@ export const TripResultsPage: React.FC = () => {
   };
 
   const handleMobileSave = async () => {
-    if (!aiData) return;
+    if (!aiData || !userId) return;
     if (!isSaved) {
       const saved = await dbService.saveTrip(userId, aiData);
       setCurrentTripRecord(saved);
       setIsSaved(true);
-      showToast(`✨ Trip saved to your Supabase profile!`);
+      showToast('Trip saved.');
     } else {
       if (currentTripRecord) {
         await dbService.deleteTrip(currentTripRecord.id, true);
@@ -95,18 +98,21 @@ export const TripResultsPage: React.FC = () => {
     }
 
     try {
+      const token = await getSessionToken();
+      if (!token || !userId) throw new Error('Sign in with Clerk to generate a trip.');
       const response = await fetch('/api/generate-trip', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(params),
       });
 
-      const resData = await response.json();
+      const resData = await response.json().catch(() => null);
 
-      if (!response.ok || !resData.success) {
-        throw new Error(resData.error || 'Failed to generate itinerary with Gemini AI.');
+      if (!response.ok || !resData?.success) {
+        throw new Error(resData?.error || 'Failed to generate itinerary with Gemini AI.');
       }
 
       const mappedData = mapRawGeminiToTripData(resData.data, params);
@@ -117,9 +123,8 @@ export const TripResultsPage: React.FC = () => {
       setCurrentTripRecord(savedRecord);
       setIsSaved(true);
 
-      showToast(`✨ Generated and saved custom AI trip for ${mappedData.destination}!`);
+      showToast(`Generated and saved a trip for ${mappedData.destination}.`);
     } catch (err: any) {
-      console.error('Gemini Trip Generation Error:', err);
       setApiError(err.message || 'Error connecting to Gemini API.');
     } finally {
       setIsLoading(false);
@@ -127,7 +132,16 @@ export const TripResultsPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchTripFromGemini();
+    if (started.current) return;
+    started.current = true;
+    if (savedTrip) {
+      setAiData(mapRawGeminiToTripData(savedTrip.complete_itinerary_json));
+      setCurrentTripRecord(savedTrip);
+      setIsSaved(true);
+      setIsLoading(false);
+    } else {
+      fetchTripFromGemini();
+    }
   }, []);
 
   const fallbackDestinationData = {
@@ -187,7 +201,7 @@ export const TripResultsPage: React.FC = () => {
 
           <div className="flex items-center gap-2 text-[11px] font-extrabold text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/50 px-3.5 py-1 rounded-full border border-sky-200 dark:border-sky-800">
             <Sparkles className="w-3.5 h-3.5 text-sky-500" />
-            <span>Powered by Gemini 2.5 Flash</span>
+            <span>Powered by Gemini</span>
           </div>
         </div>
 
@@ -209,7 +223,7 @@ export const TripResultsPage: React.FC = () => {
                 Generating Custom Itinerary with Gemini AI...
               </h2>
               <p className="text-xs text-slate-400 font-medium leading-relaxed">
-                Evaluating altitude weather forecast, optimal road routes, boutique hotels, and authentic trout dining.
+                Looking for travel references and drafting your itinerary.
               </p>
             </div>
 
@@ -228,7 +242,7 @@ export const TripResultsPage: React.FC = () => {
                 />
               </div>
               <span className="text-[10px] font-mono text-sky-400 block font-bold">
-                Synthesizing Day-by-Day Activity Slots & Verified PKR Budgets
+                Preparing daily activities and estimated PKR budgets
               </span>
             </div>
           </motion.div>
@@ -247,7 +261,7 @@ export const TripResultsPage: React.FC = () => {
                 <h4 className="text-sm font-black text-white">Gemini AI Request Notice</h4>
                 <p className="text-xs text-rose-300 font-medium">{apiError}</p>
                 <p className="text-[11px] text-slate-400">
-                  Displaying fallback curated itinerary data below. You can retry generating at any time.
+                  You can retry the request or return to the trip planner.
                 </p>
               </div>
             </div>
@@ -262,7 +276,7 @@ export const TripResultsPage: React.FC = () => {
           </motion.div>
         )}
 
-        {!isLoading && (
+        {!isLoading && aiData && (
           <>
             {/* 1. Hero Summary */}
             <HeroSummary
@@ -277,9 +291,22 @@ export const TripResultsPage: React.FC = () => {
               heroImage={destinationData.heroImage}
               isSaved={isSaved}
               onSaveToggle={handleMobileSave}
-              onRegenerate={() => fetchTripFromGemini()}
+              onRegenerate={() => fetchTripFromGemini(savedTrip ? { destination: aiData.destination, durationDays: aiData.durationDays, budgetAmount: aiData.budgetAmount } : undefined)}
               onToast={showToast}
             />
+
+            <aside className="rounded-2xl border border-slate-200 dark:border-slate-800 p-5 text-sm space-y-2">
+              <h2 className="font-bold">Travel estimates and sources</h2>
+              <p>Prices and travel times are planning estimates. Hotel availability, current prices, ratings,
+                road conditions, and forecasts could not be confirmed. Photos are illustrative.</p>
+              {aiData.sources?.length ? (
+                <ul className="list-disc space-y-1 pl-5">
+                  {aiData.sources.map(source => (
+                    <li key={source.url}><a className="underline" href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a></li>
+                  ))}
+                </ul>
+              ) : <p>No Google Search sources were available for this itinerary.</p>}
+            </aside>
 
             {/* 2. AI Executive Summary */}
             <AISummaryCard
@@ -326,7 +353,7 @@ export const TripResultsPage: React.FC = () => {
             <AttractionsSection customAttractions={aiData?.attractions} />
 
             {/* 9. Transport Logistics */}
-            <TransportSection customTransportOptions={aiData?.transportOptions} />
+            <TransportSection customTransportOptions={aiData.transportOptions ?? []} />
 
             {/* 10. Weather Forecast & Climate */}
             <WeatherForecast
@@ -360,12 +387,12 @@ export const TripResultsPage: React.FC = () => {
       </main>
 
       {/* 16. Mobile Bottom Sticky Bar */}
-      <MobileStickyBar
+      {aiData && !isLoading && <MobileStickyBar
         onSave={handleMobileSave}
         onDownload={handleMobileDownload}
         onShare={handleMobileShare}
         isSaved={isSaved}
-      />
+      />}
     </div>
   );
 };

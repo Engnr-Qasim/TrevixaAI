@@ -82,7 +82,7 @@ const DESTINATION_LIST: DestinationItem[] = [
 
 export const DestinationsPage: React.FC = () => {
   const { user } = useAuthContext();
-  const userId = user?.id || 'usr_trevixa_demo_789';
+  const userId = user?.id || 'guest';
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProvince, setSelectedProvince] = useState<string>('All');
@@ -238,7 +238,7 @@ export const DestinationsPage: React.FC = () => {
 
                   <span className="text-amber-400 font-black flex items-center gap-1 bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-full">
                     <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <span>{dest.rating}</span>
+                    <span>Destination guide</span>
                   </span>
                 </div>
               </div>

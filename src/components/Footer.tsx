@@ -34,7 +34,7 @@ export const Footer: React.FC = () => {
                 <div className="w-7 h-7 rounded-full border-2 border-white dark:border-slate-900 bg-sky-100 dark:bg-sky-900/80 flex items-center justify-center text-[10px] font-bold text-sky-700 dark:text-sky-300">SW</div>
               </div>
               <span className="text-xs font-bold text-slate-600 dark:text-slate-400 tracking-tight">
-                Join 4,200+ active travelers
+                Explore travel planning tools
               </span>
             </div>
           </div>

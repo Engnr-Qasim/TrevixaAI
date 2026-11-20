@@ -35,7 +35,7 @@ export const DashboardPage: React.FC = () => {
             <h1 className="text-xl sm:text-2xl font-black text-[#111827] dark:text-white tracking-tight flex items-center gap-2">
               <span>Explorer Hub</span>
               <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 dark:bg-blue-900/60 dark:text-sky-300 border border-sky-200 dark:border-blue-800">
-                Live
+                Planner
               </span>
             </h1>
             <p className="text-xs text-[#4b5563] dark:text-[#cbd5e1] font-medium">

@@ -66,7 +66,7 @@ export const RestaurantsSection: React.FC<RestaurantsSectionProps> = ({ customRe
     },
   ];
 
-  const restaurants = (customRestaurants && customRestaurants.length > 0) ? customRestaurants : defaultRestaurants;
+  const restaurants = customRestaurants ?? defaultRestaurants;
 
   return (
     <div className="space-y-6">
@@ -85,12 +85,13 @@ export const RestaurantsSection: React.FC<RestaurantsSectionProps> = ({ customRe
         </div>
 
         <span className="text-xs font-extrabold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 px-3.5 py-1.5 rounded-full border border-amber-200 dark:border-amber-800 self-start sm:self-center">
-          Verified Hygiene Standards
+          Confirm details with the venue
         </span>
       </div>
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {restaurants.length === 0 && <p className="text-sm text-slate-500">No dining suggestions were available. Check local listings.</p>}
         {restaurants.map((rest, idx) => (
           <motion.div
             key={rest.id}
@@ -109,12 +110,12 @@ export const RestaurantsSection: React.FC<RestaurantsSectionProps> = ({ customRe
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
 
                 <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-slate-950/80 backdrop-blur-md text-sky-300 text-[10px] font-black border border-white/20">
-                  {rest.badge}
+                  Dining suggestion
                 </span>
 
                 <div className="absolute bottom-2.5 right-3 flex items-center gap-1 bg-amber-500 text-slate-950 px-2 py-0.5 rounded-md text-[11px] font-black">
                   <Star className="w-3 h-3 fill-slate-950" />
-                  <span>{rest.rating}</span>
+                  <span>Rating unavailable</span>
                 </div>
               </div>
 

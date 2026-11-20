@@ -134,7 +134,7 @@ export const MobileBottomNav: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-base font-extrabold text-[#111827] dark:text-white">Qasim Usman</h3>
-                    <p className="text-xs text-sky-600 dark:text-blue-400 font-semibold">Verified Traveler • PKR Account</p>
+                    <p className="text-xs text-sky-600 dark:text-blue-400 font-semibold">Traveler Account</p>
                   </div>
                 </div>
                 <button

@@ -1,3 +1,5 @@
+begin;
+
 -- =========================================================
 -- TREVIXA SAAS APPLICATION SUPABASE DATABASE SCHEMA
 -- Compatible with Clerk Authentication (User ID as String Primary Key)
@@ -100,10 +102,58 @@ alter table public.favorite_trips enable row level security;
 alter table public.saved_destinations enable row level security;
 alter table public.recent_activity enable row level security;
 
--- PERMISSIVE RLS POLICIES FOR CLERK INTEGRATION
-create policy "Allow user profiles access" on public.profiles for all using (true) with check (true);
-create policy "Allow user preferences access" on public.user_preferences for all using (true) with check (true);
-create policy "Allow user trips access" on public.trips for all using (true) with check (true);
-create policy "Allow user favorites access" on public.favorite_trips for all using (true) with check (true);
-create policy "Allow user saved destinations access" on public.saved_destinations for all using (true) with check (true);
-create policy "Allow user recent activity access" on public.recent_activity for all using (true) with check (true);
+drop policy if exists "Allow user profiles access" on public.profiles;
+drop policy if exists owner_access on public.profiles;
+revoke all on public.profiles from public, anon, authenticated;
+grant select, insert, update, delete on public.profiles to authenticated;
+create policy owner_access on public.profiles for all to authenticated
+  using (id = (select auth.jwt() ->> 'sub'))
+  with check (id = (select auth.jwt() ->> 'sub'));
+
+drop policy if exists "Allow user preferences access" on public.user_preferences;
+drop policy if exists owner_access on public.user_preferences;
+revoke all on public.user_preferences from public, anon, authenticated;
+grant select, insert, update, delete on public.user_preferences to authenticated;
+create policy owner_access on public.user_preferences for all to authenticated
+  using (user_id = (select auth.jwt() ->> 'sub'))
+  with check (user_id = (select auth.jwt() ->> 'sub'));
+
+drop policy if exists "Allow user trips access" on public.trips;
+drop policy if exists owner_access on public.trips;
+revoke all on public.trips from public, anon, authenticated;
+grant select, insert, update, delete on public.trips to authenticated;
+create policy owner_access on public.trips for all to authenticated
+  using (user_id = (select auth.jwt() ->> 'sub'))
+  with check (user_id = (select auth.jwt() ->> 'sub'));
+
+drop policy if exists "Allow user favorites access" on public.favorite_trips;
+drop policy if exists owner_access on public.favorite_trips;
+revoke all on public.favorite_trips from public, anon, authenticated;
+grant select, insert, update, delete on public.favorite_trips to authenticated;
+create policy owner_access on public.favorite_trips for all to authenticated
+  using (user_id = (select auth.jwt() ->> 'sub'))
+  with check (user_id = (select auth.jwt() ->> 'sub') and (exists (
+    select 1 from public.trips where trips.id = favorite_trips.trip_id
+      and trips.user_id = (select auth.jwt() ->> 'sub')
+  )));
+
+drop policy if exists "Allow user saved destinations access" on public.saved_destinations;
+drop policy if exists owner_access on public.saved_destinations;
+revoke all on public.saved_destinations from public, anon, authenticated;
+grant select, insert, update, delete on public.saved_destinations to authenticated;
+create policy owner_access on public.saved_destinations for all to authenticated
+  using (user_id = (select auth.jwt() ->> 'sub'))
+  with check (user_id = (select auth.jwt() ->> 'sub'));
+
+drop policy if exists "Allow user recent activity access" on public.recent_activity;
+drop policy if exists owner_access on public.recent_activity;
+revoke all on public.recent_activity from public, anon, authenticated;
+grant select, insert, update, delete on public.recent_activity to authenticated;
+create policy owner_access on public.recent_activity for all to authenticated
+  using (user_id = (select auth.jwt() ->> 'sub'))
+  with check (user_id = (select auth.jwt() ->> 'sub') and (trip_id is null or exists (
+    select 1 from public.trips where trips.id = recent_activity.trip_id
+      and trips.user_id = (select auth.jwt() ->> 'sub')
+  )));
+
+commit;

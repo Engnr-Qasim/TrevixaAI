@@ -124,6 +124,7 @@ export interface GalleryItem {
 }
 
 export interface GeneratedTripData {
+  sources?: { title: string; url: string }[];
   destination: string;
   region: string;
   matchScore: number;

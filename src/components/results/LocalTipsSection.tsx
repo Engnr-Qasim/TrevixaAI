@@ -112,7 +112,7 @@ export const LocalTipsSection: React.FC<LocalTipsSectionProps> = ({ customTips }
     'text-blue-500 bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800',
   ];
 
-  const tips = (customTips && customTips.length > 0)
+  const tips = customTips
     ? customTips.map((ct, i) => ({
         title: ct.title,
         items: ct.items,

@@ -32,11 +32,11 @@ export const ProcessingScreen: React.FC<ProcessingScreenProps> = ({
   const [isCompleted, setIsCompleted] = useState(false);
 
   const processingSteps = [
-    { title: 'Analyzing destination terrain & roads...', icon: MapPin },
-    { title: 'Finding top-rated attractions & viewpoints...', icon: Compass },
+    { title: 'Preparing destination details...', icon: MapPin },
+    { title: 'Collecting your interests...', icon: Compass },
     { title: 'Estimating 4x4 Jeep rentals & fuel budget...', icon: Wallet },
-    { title: 'Searching boutique hotels & resort stays...', icon: Hotel },
-    { title: 'Checking live weather forecasts...', icon: Sun },
+    { title: 'Preparing lodging preferences...', icon: Hotel },
+    { title: 'Preparing travel dates...', icon: Sun },
     { title: 'Optimizing daily route pace & order...', icon: Calendar },
     { title: 'Preparing personalized AI recommendations...', icon: Sparkles },
   ];
@@ -84,24 +84,24 @@ export const ProcessingScreen: React.FC<ProcessingScreenProps> = ({
           {/* Title */}
           <div className="space-y-2">
             <span className="text-xs font-black uppercase tracking-widest text-sky-400">
-              {isCompleted ? 'AI Generation Complete' : 'Co-Pilot Neural Engine'}
+              {isCompleted ? 'Trip Details Ready' : 'Trip Setup'}
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
               {isCompleted
-                ? `Your ${destination} Itinerary is Ready!`
+                ? `Your ${destination} Trip Details Are Ready!`
                 : `Crafting Your Custom ${destination} Trip`}
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 font-medium max-w-md mx-auto">
               {isCompleted
-                ? `${durationDays} Days / ${durationDays - 1} Nights plan generated within budget of PKR ${budgetAmount.toLocaleString()}.`
-                : 'Synthesizing routes, weather patterns, local hotels, and jeep allocations...'}
+                ? `${durationDays} Days / ${durationDays - 1} Nights with a planning budget of PKR ${budgetAmount.toLocaleString()}.`
+                : 'Preparing your preferences for itinerary generation.'}
             </p>
           </div>
 
           {/* Progress Bar & Percentage */}
           <div className="space-y-2 max-w-md mx-auto">
             <div className="flex justify-between text-xs font-extrabold text-slate-400">
-              <span>Building Itinerary</span>
+              <span>Preparing trip details</span>
               <span className="text-sky-400">{progressPercent}%</span>
             </div>
             <div className="w-full h-3 rounded-full bg-slate-800 overflow-hidden border border-white/10">

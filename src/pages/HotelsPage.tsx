@@ -21,7 +21,7 @@ export const HotelsPage: React.FC = () => {
         },
         {
           title: 'Amenity Badges',
-          description: 'Verified indicators for hot water, heating, generators, Wi-Fi, mountain view, and parking.',
+          description: 'Check with each property about heating, Wi-Fi, parking, and other amenities.',
         },
         {
           title: 'Location Maps & Distance',

@@ -1,20 +1,34 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const url = import.meta.env.VITE_SUPABASE_URL;
+const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const IS_SUPABASE_CONFIGURED = Boolean(
-  SUPABASE_URL &&
-    SUPABASE_ANON_KEY &&
-    SUPABASE_URL.startsWith('https://') &&
-    !SUPABASE_URL.includes('your-supabase-url')
-);
+function isPublicKey(key: string) {
+  if (key.startsWith('sb_publishable_')) return true;
+  try {
+    const payload = key.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(atob(payload)).role === 'anon';
+  } catch {
+    return false;
+  }
+}
 
-export const supabase: SupabaseClient | null = IS_SUPABASE_CONFIGURED
-  ? createClient(SUPABASE_URL as string, SUPABASE_ANON_KEY as string, {
-      auth: {
-        persistSession: false, // Session managed via Clerk Auth
-        autoRefreshToken: false,
-      },
-    })
-  : null;
+export let supabase: SupabaseClient | null = null;
+export const IS_SUPABASE_CONFIGURED = Boolean(url?.startsWith('https://') && publishableKey && isPublicKey(publishableKey));
+
+export function connectSupabaseSession(getToken: () => Promise<string | null>) {
+  if (!IS_SUPABASE_CONFIGURED) return;
+  let active = true;
+  const client = createClient(url!, publishableKey!, {
+    accessToken: async () => {
+      const token = active ? await getToken() : null;
+      if (!active || !token) throw new Error('Sign in to access your travel data.');
+      return token;
+    },
+  });
+  supabase = client;
+  return () => {
+    active = false;
+    if (supabase === client) supabase = null;
+  };
+}

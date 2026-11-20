@@ -61,7 +61,7 @@ export const TravelInsights: React.FC = () => {
             <span>Lifetime Travel Analytics</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-[#111827] dark:text-white tracking-tight">
-            Travel Insights
+            Example Travel Insights
           </h2>
         </div>
 

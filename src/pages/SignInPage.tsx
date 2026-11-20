@@ -15,7 +15,8 @@ import {
   Info,
   X,
 } from 'lucide-react';
-import { useAuthContext, IS_CLERK_CONFIGURED } from '../context/AuthContext';
+import { useAuthContext, IS_CLERK_CONFIGURED, CAN_USE_DEMO_AUTH } from '../context/AuthContext';
+import { authReturnPath } from '../components/auth/PublicOnlyRoute';
 import { Button } from '../components/ui/button';
 
 export const SignInPage: React.FC = () => {
@@ -31,7 +32,7 @@ export const SignInPage: React.FC = () => {
   const [forgotEmail, setForgotEmail] = useState('');
   const [forgotSent, setForgotSent] = useState(false);
 
-  const from = location.state?.from?.pathname || '/dashboard';
+  const from = authReturnPath(location);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,10 +107,10 @@ export const SignInPage: React.FC = () => {
           <div className="p-4 rounded-2xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 text-sky-800 dark:text-sky-300 text-xs font-bold space-y-1">
             <div className="flex items-center gap-2 font-black text-sky-900 dark:text-sky-200">
               <Info className="w-4 h-4 text-sky-500 shrink-0" />
-              <span>Clerk Authentication Mode</span>
+              <span>Account Sign-In</span>
             </div>
             <p className="font-medium text-[11px] text-sky-700 dark:text-sky-300 leading-relaxed">
-              To connect live production Clerk Auth, set <code className="bg-sky-100 dark:bg-sky-900/80 px-1 py-0.5 rounded font-mono">VITE_CLERK_PUBLISHABLE_KEY</code> in your environment file.
+              {CAN_USE_DEMO_AUTH ? 'Local demo mode. Trip generation requires a Clerk account.' : 'Authentication is temporarily unavailable.'}
             </p>
           </div>
         )}
@@ -117,9 +118,9 @@ export const SignInPage: React.FC = () => {
         {/* Render Clerk Component if Live OR Render Custom Auth Form */}
         {isClerkLive ? (
           <div className="flex justify-center">
-            <ClerkSignIn redirectUrl={from} signUpUrl="/sign-up" />
+            <ClerkSignIn routing="hash" forceRedirectUrl={from} signUpForceRedirectUrl={from} signUpUrl={`/sign-up?returnTo=${encodeURIComponent(from)}`} />
           </div>
-        ) : (
+        ) : CAN_USE_DEMO_AUTH ? (
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -232,7 +233,7 @@ export const SignInPage: React.FC = () => {
               </Link>
             </div>
           </motion.div>
-        )}
+        ) : null}
       </div>
 
       {/* Forgot Password Modal */}

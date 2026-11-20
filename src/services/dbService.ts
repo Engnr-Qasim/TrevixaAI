@@ -201,6 +201,8 @@ const getInitialSeedTrips = (userId: string): DbTripRecord[] => [
 // DATABASE SERVICE METHODS
 // =========================================================
 
+let profileSync: Promise<void> | undefined;
+
 export const dbService = {
   // -------------------------------------------------------
   // 0. PROFILE SYNC
@@ -210,7 +212,7 @@ export const dbService = {
 
     if (IS_SUPABASE_CONFIGURED && supabase) {
       try {
-        await supabase.from('profiles').upsert(
+        profileSync = Promise.resolve(supabase.from('profiles').upsert(
           {
             id: user.id,
             email: user.email || '',
@@ -219,9 +221,14 @@ export const dbService = {
             updated_at: new Date().toISOString(),
           },
           { onConflict: 'id' }
-        );
+        )).then(({ error }) => {
+          if (error) console.warn('Travel profile could not sync.');
+        }).catch(() => {
+          console.warn('Travel profile could not sync.');
+        });
+        await profileSync;
       } catch (err) {
-        console.warn('Supabase profile upsert error:', err);
+        console.warn('Supabase profile upsert error:');
       }
     } else {
       const profiles = getLocalStorage<Record<string, any>>(STORAGE_KEYS.PROFILES, {});
@@ -267,6 +274,7 @@ export const dbService = {
 
     if (IS_SUPABASE_CONFIGURED && supabase) {
       try {
+        await profileSync;
         const { data, error } = await supabase
           .from('trips')
           .insert({
@@ -290,21 +298,21 @@ export const dbService = {
           .single();
 
         if (error) {
-          console.error('Supabase saveTrip error:', error);
+          console.error('Supabase saveTrip error:');
         } else if (data) {
           // Log recent activity
           await this.recordRecentActivity(userId, 'generated_trip', data.id, tripTitle, { destination: tripData.destination });
           return data as DbTripRecord;
         }
       } catch (e) {
-        console.warn('Supabase exception during saveTrip, falling back:', e);
+        console.warn('Supabase exception during saveTrip, falling back:');
       }
     }
 
     // Local Storage Fallback
     const existing = getLocalStorage<DbTripRecord[]>(STORAGE_KEYS.TRIPS, []);
     const userTrips = existing.filter((t) => t.user_id === userId);
-    if (userTrips.length === 0 && existing.length === 0) {
+    if (import.meta.env.DEV && userId.startsWith('usr_') && userTrips.length === 0 && existing.length === 0) {
       existing.push(...getInitialSeedTrips(userId));
     }
     existing.unshift(newTrip);
@@ -369,7 +377,7 @@ export const dbService = {
           return data as DbTripRecord[];
         }
       } catch (e) {
-        console.warn('Supabase getUserTrips error:', e);
+        console.warn('Supabase getUserTrips error:');
       }
     }
 
@@ -377,7 +385,7 @@ export const dbService = {
     const all = getLocalStorage<DbTripRecord[]>(STORAGE_KEYS.TRIPS, []);
     let userTrips = all.filter((t) => t.user_id === userId);
 
-    if (userTrips.length === 0) {
+    if (import.meta.env.DEV && userId.startsWith('usr_') && userTrips.length === 0) {
       const seed = getInitialSeedTrips(userId);
       all.push(...seed);
       setLocalStorage(STORAGE_KEYS.TRIPS, all);
@@ -430,7 +438,7 @@ export const dbService = {
           .eq('id', tripId);
         if (!error) return true;
       } catch (e) {
-        console.warn('Supabase updateTripTitle error:', e);
+        console.warn('Supabase updateTripTitle error:');
       }
     }
 
@@ -463,7 +471,7 @@ export const dbService = {
         }
         return true;
       } catch (e) {
-        console.warn('Supabase toggleFavoriteTrip error:', e);
+        console.warn('Supabase toggleFavoriteTrip error:');
       }
     }
 
@@ -526,7 +534,7 @@ export const dbService = {
           return data as DbTripRecord;
         }
       } catch (e) {
-        console.warn('Supabase duplicateTrip error:', e);
+        console.warn('Supabase duplicateTrip error:');
       }
     }
 
@@ -549,7 +557,7 @@ export const dbService = {
         }
         return true;
       } catch (e) {
-        console.warn('Supabase deleteTrip error:', e);
+        console.warn('Supabase deleteTrip error:');
       }
     }
 
@@ -574,7 +582,7 @@ export const dbService = {
         await supabase.from('trips').update({ is_deleted: false, updated_at: new Date().toISOString() }).eq('id', tripId);
         return true;
       } catch (e) {
-        console.warn('Supabase restoreTrip error:', e);
+        console.warn('Supabase restoreTrip error:');
       }
     }
 
@@ -605,7 +613,7 @@ export const dbService = {
           return data as DbSavedDestination[];
         }
       } catch (e) {
-        console.warn('Supabase getSavedDestinations error:', e);
+        console.warn('Supabase getSavedDestinations error:');
       }
     }
 
@@ -627,6 +635,7 @@ export const dbService = {
 
     if (IS_SUPABASE_CONFIGURED && supabase) {
       try {
+        await profileSync;
         if (isAlreadySaved) {
           await supabase.from('saved_destinations').delete().eq('user_id', userId).eq('destination_id', dest.destination_id);
           return false;
@@ -644,7 +653,7 @@ export const dbService = {
           return true;
         }
       } catch (e) {
-        console.warn('Supabase toggleSaveDestination error:', e);
+        console.warn('Supabase toggleSaveDestination error:');
       }
     }
 
@@ -684,6 +693,7 @@ export const dbService = {
   ): Promise<void> {
     if (IS_SUPABASE_CONFIGURED && supabase) {
       try {
+        await profileSync;
         await supabase.from('recent_activity').insert({
           user_id: userId,
           activity_type: activityType,
@@ -692,7 +702,7 @@ export const dbService = {
           details,
         });
       } catch (e) {
-        console.warn('Supabase recordRecentActivity error:', e);
+        console.warn('Supabase recordRecentActivity error:');
       }
     }
 
@@ -727,7 +737,7 @@ export const dbService = {
           return data as DbRecentActivity[];
         }
       } catch (e) {
-        console.warn('Supabase getRecentActivity error:', e);
+        console.warn('Supabase getRecentActivity error:');
       }
     }
 
@@ -755,7 +765,7 @@ export const dbService = {
           return data as DbUserPreferences;
         }
       } catch (e) {
-        console.warn('Supabase getUserPreferences error:', e);
+        console.warn('Supabase getUserPreferences error:');
       }
     }
 
@@ -774,9 +784,10 @@ export const dbService = {
 
     if (IS_SUPABASE_CONFIGURED && supabase) {
       try {
+        await profileSync;
         await supabase.from('user_preferences').upsert(updated, { onConflict: 'user_id' });
       } catch (e) {
-        console.warn('Supabase saveUserPreferences error:', e);
+        console.warn('Supabase saveUserPreferences error:');
       }
     }
 

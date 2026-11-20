@@ -200,7 +200,7 @@ const HERO_RECOMMENDATIONS = [
   },
 ];
 
-// 20 Rich & Verified Pakistan Destination Cards
+// Pakistan Destination Cards
 const DESTINATIONS = [
   {
     id: 'hunza',
@@ -456,13 +456,13 @@ const FEATURES = [
     icon: Wallet,
     title: 'Budget Estimator',
     description:
-      'Accurate PKR forecasts for fuel, 4x4 jeep hires, hotel stays, food, and emergency reserves with zero hidden fees.',
+      'Estimate PKR costs for fuel, jeep hires, accommodation, meals, and emergency reserves.',
   },
   {
     icon: Hotel,
     title: 'Hotel Recommendations',
     description:
-      'Discover handpicked boutique resorts, alpine cottages, and budget eco-lodges verified by real travel telemetry.',
+      'Explore ideas for boutique resorts, alpine cottages, and budget lodges. Confirm prices and availability directly.',
   },
   {
     icon: Utensils,
@@ -492,7 +492,7 @@ const TESTIMONIALS = [
     location: 'London, UK',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
     quote:
-      'Trevixa made my 10-day Skardu and Hunza expedition completely stress-free. The budget estimator was within 4% of my actual on-ground expenses!',
+      'A group organizer could sketch a ten-day Skardu and Hunza route and compare estimated transport and lodging costs.',
     rating: 5,
   },
   {
@@ -520,7 +520,7 @@ const FAQS = [
   {
     question: "How does Trevixa's AI create personalized travel itineraries?",
     answer:
-      "Trevixa synthesizes real-time seasonal road accessibility, hotel pricing tiers, regional travel times, and local weather patterns in Pakistan. It crafts custom day-by-day itineraries tailored specifically to your chosen group size, trip duration, and budget preference.",
+      "Trevixa drafts an itinerary from your preferences and looks for travel references. Check current conditions with local sources. It crafts custom day-by-day itineraries tailored specifically to your chosen group size, trip duration, and budget preference.",
   },
   {
     question: 'Is Trevixa free to use for planning trips in Pakistan?',
@@ -530,7 +530,7 @@ const FAQS = [
   {
     question: 'How accurate are the budget estimations for transport, hotels, and food?',
     answer:
-      'Our pricing database is regularly updated with actual local market rates across Pakistan, including fuel costs, 4x4 jeep rentals in mountain passes, hotel price tiers (Standard, Comfort, Luxury), and local meal averages in PKR.',
+      'The budget is a planning estimate in PKR. Confirm fuel prices, room rates, transport fares, and fees before booking.',
   },
   {
     question: 'Can I save, customize, or export my generated itineraries?',
@@ -739,7 +739,7 @@ export const HomePage: React.FC = () => {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-200 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
                     </span>
-                    <span>{currentHero.matchScore}</span>
+                    <span>Sample plan</span>
                   </span>
                 </div>
               </div>
@@ -757,7 +757,7 @@ export const HomePage: React.FC = () => {
                   </div>
                   <span className="px-3 py-1.5 rounded-full bg-slate-950/80 backdrop-blur-md border border-amber-400/40 text-amber-300 text-xs font-extrabold flex items-center gap-1.5 shrink-0">
                     <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                    <span>{currentHero.rating} ({currentHero.reviews.toLocaleString()} reviews)</span>
+                    <span>Featured destination</span>
                   </span>
                 </div>
               </div>
@@ -783,7 +783,7 @@ export const HomePage: React.FC = () => {
                   <span className="block text-[10px] uppercase font-extrabold tracking-wider text-sky-600 dark:text-sky-400 mb-0.5">
                     🌤️ Weather
                   </span>
-                  <span className="text-xs sm:text-sm font-extrabold text-[#111827] dark:text-white">{currentHero.weather}</span>
+                  <span className="text-xs sm:text-sm font-extrabold text-[#111827] dark:text-white">Check local forecast</span>
                 </div>
                 <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-[#050b14] border border-slate-200/80 dark:border-slate-800 text-left">
                   <span className="block text-[10px] uppercase font-extrabold tracking-wider text-sky-600 dark:text-sky-400 mb-0.5">
@@ -1030,7 +1030,7 @@ export const HomePage: React.FC = () => {
           </div>
           <SectionTitle>Explore Breathtaking Pakistani Regions</SectionTitle>
           <SectionDescription className="mx-auto">
-            Discover verified starting budgets, optimal seasons, ratings, and ideal trip durations for Pakistan top 20 destinations.
+            Explore 20 destinations with sample budgets, suggested seasons, and trip lengths.
           </SectionDescription>
         </SectionHeader>
 
@@ -1080,7 +1080,7 @@ export const HomePage: React.FC = () => {
                     {/* Rating Badge */}
                     <div className="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md px-2 py-0.5 rounded-full text-xs font-extrabold text-amber-500 flex items-center gap-1 shadow">
                       <Star className="w-3 h-3 fill-amber-500" />
-                      <span>{dest.rating}</span>
+                      <span>Destination guide</span>
                     </div>
 
                     {/* Category Label at bottom of image */}
@@ -1160,7 +1160,7 @@ export const HomePage: React.FC = () => {
               step: '02',
               title: 'Generate AI Itinerary',
               description:
-                'Trevixa analyzes road conditions, hotel availability, 4x4 jeep requirements, and local dining spots to build a custom plan.',
+                'Trevixa looks for travel references and suggests stops, stays, transport, and dining for your itinerary.',
             },
             {
               step: '03',
@@ -1197,8 +1197,8 @@ export const HomePage: React.FC = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
             >
-              <div className="text-3xl sm:text-5xl font-black tracking-tight">15,400+</div>
-              <div className="text-xs uppercase tracking-widest font-extrabold text-sky-200 mt-2">Trips Planned</div>
+              <div className="text-3xl sm:text-5xl font-black tracking-tight">Plan</div>
+              <div className="text-xs uppercase tracking-widest font-extrabold text-sky-200 mt-2">Day-by-day itineraries</div>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -1206,8 +1206,8 @@ export const HomePage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
             >
-              <div className="text-3xl sm:text-5xl font-black tracking-tight">120+</div>
-              <div className="text-xs uppercase tracking-widest font-extrabold text-sky-200 mt-2">Destinations</div>
+              <div className="text-3xl sm:text-5xl font-black tracking-tight">Explore</div>
+              <div className="text-xs uppercase tracking-widest font-extrabold text-sky-200 mt-2">Destination ideas</div>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -1215,8 +1215,8 @@ export const HomePage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              <div className="text-3xl sm:text-5xl font-black tracking-tight">99.2%</div>
-              <div className="text-xs uppercase tracking-widest font-extrabold text-sky-200 mt-2">Happy Travelers</div>
+              <div className="text-3xl sm:text-5xl font-black tracking-tight">Budget</div>
+              <div className="text-xs uppercase tracking-widest font-extrabold text-sky-200 mt-2">PKR estimates</div>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -1224,8 +1224,8 @@ export const HomePage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              <div className="text-3xl sm:text-5xl font-black tracking-tight">48,500+</div>
-              <div className="text-xs uppercase tracking-widest font-extrabold text-sky-200 mt-2">AI Plans Generated</div>
+              <div className="text-3xl sm:text-5xl font-black tracking-tight">Save</div>
+              <div className="text-xs uppercase tracking-widest font-extrabold text-sky-200 mt-2">Trip history</div>
             </motion.div>
           </div>
         </div>
@@ -1236,11 +1236,11 @@ export const HomePage: React.FC = () => {
         <SectionHeader className="text-center mx-auto max-w-3xl">
           <div className="inline-flex items-center gap-2 text-sky-600 dark:text-blue-400 font-bold text-xs uppercase tracking-widest mb-2">
             <Award className="h-4 w-4" />
-            <span>Community Feedback</span>
+            <span>Example Trips</span>
           </div>
-          <SectionTitle>Loved by Modern Explorers</SectionTitle>
+          <SectionTitle>How Travelers Could Use Trevixa</SectionTitle>
           <SectionDescription className="mx-auto">
-            See what digital nomads, group leads, and solo travelers say about planning with Trevixa.
+            Fictional examples for different travel styles.
           </SectionDescription>
         </SectionHeader>
 
@@ -1269,11 +1269,11 @@ export const HomePage: React.FC = () => {
                 <div className="flex items-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
                   <img
                     src={item.avatar}
-                    alt={item.name}
+                    alt=""
                     className="w-10 h-10 rounded-full object-cover border-2 border-sky-500"
                   />
                   <div>
-                    <div className="text-sm font-extrabold text-[#111827] dark:text-white">{item.name}</div>
+                    <div className="text-sm font-extrabold text-[#111827] dark:text-white">{item.role}</div>
                     <div className="text-xs text-[#6b7280] dark:text-slate-400">
                       {item.role} • {item.location}
                     </div>
@@ -1379,7 +1379,7 @@ export const HomePage: React.FC = () => {
               Ready to Plan Your Next Adventure?
             </h2>
             <p className="text-base sm:text-lg text-sky-100 font-normal leading-relaxed">
-              Join over 15,000 travelers exploring Pakistan with AI-powered precision budgeting and intelligent itineraries.
+              Plan a trip across Pakistan with a personalized itinerary and estimated costs in PKR.
             </p>
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link to="/plan-trip" className="w-full sm:w-auto">

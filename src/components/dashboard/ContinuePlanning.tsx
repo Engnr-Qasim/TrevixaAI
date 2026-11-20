@@ -34,7 +34,7 @@ export const ContinuePlanning: React.FC = () => {
             Continue Planning
           </h2>
           <p className="text-xs sm:text-sm text-[#4b5563] dark:text-[#cbd5e1] font-medium">
-            Pick up right where you left off on your latest draft
+            Preview how a trip draft is organized
           </p>
         </div>
 
@@ -43,7 +43,7 @@ export const ContinuePlanning: React.FC = () => {
           onClick={() => setHasActiveTrip(!hasActiveTrip)}
           className="text-xs font-semibold text-sky-600 dark:text-blue-400 hover:underline flex items-center gap-1"
         >
-          <span>{hasActiveTrip ? 'View Empty State' : 'View Draft Trip'}</span>
+          <span>{hasActiveTrip ? 'View Empty State' : 'View Example Draft'}</span>
         </button>
       </div>
 

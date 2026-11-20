@@ -58,12 +58,12 @@ export const TrendingThisWeek: React.FC = () => {
             <span>Top Search Volume in Pakistan</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-[#111827] dark:text-white tracking-tight">
-            Trending This Week
+            Featured Destinations
           </h2>
         </div>
 
         <Link to="/destinations" className="text-xs font-extrabold text-sky-600 dark:text-blue-400 hover:underline flex items-center gap-1">
-          <span>Browse Trending List</span>
+          <span>Browse Destinations</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
@@ -90,7 +90,7 @@ export const TrendingThisWeek: React.FC = () => {
               {/* Trending Rank Pill */}
               <div className="absolute top-4 left-4 px-3.5 py-1.5 rounded-full bg-amber-500 text-slate-950 font-black text-xs shadow-lg flex items-center gap-1.5">
                 <Flame className="w-3.5 h-3.5 fill-current" />
-                <span>Trending #{spot.rank}</span>
+                <span>Destination idea</span>
               </div>
 
               {/* Views Counter Overlay */}

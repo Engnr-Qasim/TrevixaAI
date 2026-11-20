@@ -86,12 +86,12 @@ export const HeroSummary: React.FC<HeroSummaryProps> = ({
         <div className="flex items-center gap-2">
           <div className="px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/20 text-xs font-black text-sky-400 flex items-center gap-1.5 shadow-lg">
             <Zap className="w-4 h-4 text-sky-400 fill-sky-400" />
-            <span>{matchScore}% AI Match</span>
+            <span>{matchScore}% Estimated Match</span>
           </div>
 
           <div className="px-3.5 py-1.5 rounded-full bg-emerald-500/20 backdrop-blur-md border border-emerald-500/40 text-xs font-extrabold text-emerald-300 flex items-center gap-1.5">
             <Award className="w-4 h-4 text-emerald-400" />
-            <span>Verified AI Route</span>
+            <span>AI Itinerary Draft</span>
           </div>
         </div>
 

@@ -110,7 +110,7 @@ export const BudgetBreakdown: React.FC<BudgetBreakdownProps> = ({ totalBudget, c
             </h2>
           </div>
           <p className="text-xs text-[#4b5563] dark:text-[#cbd5e1] font-medium mt-0.5">
-            Transparent PKR cost distribution based on current Northern fuel and hotel tariffs.
+            Estimated costs in PKR. Confirm current prices with providers.
           </p>
         </div>
 
