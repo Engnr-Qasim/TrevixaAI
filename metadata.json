@@ -1,0 +1,6 @@
+{
+  "name": "Trevixa",
+  "description": "Plan Smart. Travel Better. A Nexora Product - AI-powered travel planning platform for exploring Pakistan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

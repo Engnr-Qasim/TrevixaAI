@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --bg-primary: #ffffff;
+    --bg-surface: #ffffff;
+    --bg-elevated: #f8fafc;
+    --border-subtle: #e5e7eb;
+    --border-strong: #d1d5db;
+    --text-primary: #111827;
+    --text-secondary: #374151;
+    --text-muted: #6b7280;
+    --text-nav: #4b5563;
+    --accent: #0ea5e9;
+    --accent-hover: #0284c7;
+    --accent-cyan: #06b6d4;
+  }
+
+  .dark {
+    --bg-primary: #050b14;
+    --bg-surface: #0b1120;
+    --bg-elevated: #111d33;
+    --border-subtle: #1e293b;
+    --border-strong: #334155;
+    --text-primary: #ffffff;
+    --text-secondary: #f3f6f6;
+    --text-muted: #cbd5e1;
+    --text-nav: #e5e7eb;
+    --accent: #3b82f6;
+    --accent-hover: #2563eb;
+    --accent-cyan: #38bdf8;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+/* Background Grid utilities */
+.bg-radial-grid {
+  background-image: radial-gradient(rgba(107, 114, 128, 0.12) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.dark .bg-radial-grid {
+  background-image: radial-gradient(rgba(59, 130, 246, 0.12) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Glassmorphism card utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+}
+
+.dark .glass-panel {
+  background: rgba(11, 17, 32, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(30, 41, 59, 0.8);
+}
+
+/* Soft Accent Glow Effects */
+.glow-accent {
+  box-shadow: 0 0 25px -5px rgba(14, 165, 233, 0.25);
+}
+
+.dark .glow-accent {
+  box-shadow: 0 0 25px -5px rgba(59, 130, 246, 0.3);
+}
+
+/* Custom scrollbar polish */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(14, 165, 233, 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
+
+/* Hide scrollbar for clean swipeable carousels */
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar,
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
